@@ -1,0 +1,4 @@
+{
+    "command": "npm install && npx tsc --noEmit && npm test -- --ci",
+    "working_directory": "/home/kavia/workspace/code-generation/e-commerce-platform-with-real-time-order-management-40738-40749/ecommerce_frontend"
+}
