@@ -1,82 +1,56 @@
-# Lightweight React Template for KAVIA
+# E-commerce Frontend (React)
 
-This project provides a minimal React template with a clean, modern UI and minimal dependencies.
+Customer-facing web interface for querying orders, managing returns, and viewing personalized product recommendations.
 
-## Features
+## Environment
 
-- **Lightweight**: No heavy UI frameworks - uses only vanilla CSS and React
-- **Modern UI**: Clean, responsive design with KAVIA brand styling
-- **Fast**: Minimal dependencies for quick loading times
-- **Simple**: Easy to understand and modify
+Create a `.env` file based on `.env.example` with:
+
+- REACT_APP_BACKEND_URL=http://localhost:3001
+- Optional:
+  - REACT_APP_SUPABASE_URL=
+  - REACT_APP_SUPABASE_ANON_KEY=
+
+Notes:
+- The backend must be reachable on port 3001.
+- If Supabase vars are set, Orders page will subscribe to realtime updates on `orders` table.
 
 ## Getting Started
 
-In the project directory, you can run:
+1) Install dependencies
+- npm install
 
-### `npm start`
+2) Run locally
+- npm start
+- Open http://localhost:3000
 
-Runs the app in development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+3) Routes
+- /login
+- /orders
+- /returns
+- /recommendations
 
-### `npm test`
+## Integration Checklist
 
-Launches the test runner in interactive watch mode.
+- Backend URL in .env points to http://localhost:3001
+- Backend CORS allows http://localhost:3000 (see backend .env ALLOW_ORIGINS)
+- Database running at postgresql://appuser:dbuser123@localhost:5000/myapp (see database README)
+- Optional Supabase realtime variables configured if you want realtime on Orders page
 
-### `npm run build`
+## Quick Verification Steps
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Run database migrations/seed:
+   psql postgresql://appuser:dbuser123@localhost:5000/myapp -f ../ecommerce_database/startup.sql
 
-## Customization
+2. Start backend:
+   uvicorn src.api.main:app --host 0.0.0.0 --port 3001 --reload
 
-### Colors
+3. Start frontend:
+   npm start
 
-The main brand colors are defined as CSS variables in `src/App.css`:
-
-```css
-:root {
-  --kavia-orange: #E87A41;
-  --kavia-dark: #1A1A1A;
-  --text-color: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --border-color: rgba(255, 255, 255, 0.1);
-}
-```
-
-### Components
-
-This template uses pure HTML/CSS components instead of a UI framework. You can find component styles in `src/App.css`. 
-
-Common components include:
-- Buttons (`.btn`, `.btn-large`)
-- Container (`.container`)
-- Navigation (`.navbar`)
-- Typography (`.title`, `.subtitle`, `.description`)
-
-## Learn More
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+4. App flow:
+   - Visit /login, register then login via /auth endpoints
+   - Go to /orders and view user orders
+   - Create a return on /returns
+   - View recommendations on /recommendations
+   - If Supabase configured, trigger an order change and observe realtime updates on /orders

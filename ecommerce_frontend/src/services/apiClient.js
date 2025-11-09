@@ -39,8 +39,8 @@ export async function getOrderById(orderId) {
 
 // PUBLIC_INTERFACE
 export async function getReturnPolicy() {
-  /** Fetch return policy text/details. */
-  const { data } = await api.get('/returns/policy');
+  /** Fetch return policy list/details from backend. */
+  const { data } = await api.get('/returns/policies');
   return data;
 }
 

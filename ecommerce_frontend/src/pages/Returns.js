@@ -14,7 +14,16 @@ export default function Returns() {
     (async () => {
       try {
         const data = await getReturnPolicy();
-        setPolicy(data?.policy || data?.text || JSON.stringify(data));
+        // Backend returns an array of policies
+        if (Array.isArray(data) && data.length > 0) {
+          const formatted = data.map(p => {
+            const target = p.product_id ? `Product #${p.product_id}` : 'Global';
+            return `• ${target}: ${p.policy_text} (days: ${p.days_to_return})`;
+          }).join('\n');
+          setPolicy(formatted);
+        } else {
+          setPolicy('No specific return policies found. Standard 30-day return policy applies.');
+        }
       } catch {
         setPolicy('Standard 30-day return policy applies. Items must be in original condition.');
       }
