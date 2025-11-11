@@ -60,7 +60,15 @@ export async function getRecommendations() {
 
 // PUBLIC_INTERFACE
 export async function login(email, password) {
-  /** Mocked login to backend; expects token in response. */
+  /**
+   * Login to backend; backend spec returns:
+   * { access_token: string, token_type: 'bearer' }
+   */
   const { data } = await api.post('/auth/login', { email, password });
-  return data;
+  // Normalize to { token } shape for callers (existing UI)
+  if (data && typeof data === 'object') {
+    const token = data.access_token || data.token || null;
+    return { token, raw: data };
+  }
+  return { token: null, raw: data };
 }

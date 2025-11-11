@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login as apiLogin, setAuthToken } from '../services/apiClient';
+import { storeToken } from '../services/auth';
 
 // PUBLIC_INTERFACE
 export default function Login() {
@@ -17,11 +18,17 @@ export default function Login() {
     setError('');
     try {
       const { token } = await apiLogin(email, password);
+      if (!token) {
+        throw new Error('Invalid token response');
+      }
+      // Set axios header and persist
       setAuthToken(token);
-      localStorage.setItem('auth_token', token);
-      navigate('/orders');
+      storeToken(token);
+      navigate('/orders', { replace: true });
     } catch (err) {
-      setError(err?.response?.data?.detail || 'Login failed');
+      // Avoid leaking sensitive details
+      const detail = err?.response?.data?.detail || 'Login failed';
+      setError(detail);
     } finally {
       setBusy(false);
     }
@@ -41,6 +48,7 @@ export default function Login() {
               required
               placeholder="you@example.com"
               style={{ width: '100%', padding: 8 }}
+              autoComplete="username"
             />
           </label>
           <label>
@@ -52,6 +60,7 @@ export default function Login() {
               required
               placeholder="••••••••"
               style={{ width: '100%', padding: 8 }}
+              autoComplete="current-password"
             />
           </label>
           <button className="theme-toggle" type="submit" disabled={busy} aria-busy={busy}>

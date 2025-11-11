@@ -20,6 +20,7 @@ export default function Layout({ children }) {
           <NavLink to="/orders" style={activeStyle}>Orders</NavLink>
           <NavLink to="/returns" style={activeStyle}>Returns</NavLink>
           <NavLink to="/recommendations" style={activeStyle}>Recommendations</NavLink>
+          <NavLink to="/logout" style={activeStyle}>Logout</NavLink>
         </nav>
       </header>
       <main style={{ padding: 24 }}>
