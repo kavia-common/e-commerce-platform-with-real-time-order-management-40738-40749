@@ -14,8 +14,23 @@ export default function Layout({ children }) {
   /** Simple layout with top navigation for pages. */
   return (
     <div className="App">
-      <header className="App-header" style={{ minHeight: 'auto', padding: 24 }}>
-        <nav aria-label="Main navigation" style={{ marginBottom: 16 }}>
+      <header
+        className="App-header"
+        style={{
+          minHeight: 'auto',
+          padding: 24,
+          position: 'relative',
+          zIndex: 100, // ensure nav sits above floating controls
+        }}
+      >
+        <nav
+          aria-label="Main navigation"
+          style={{
+            marginBottom: 16,
+            position: 'relative',
+            zIndex: 100,
+          }}
+        >
           <NavLink to="/login" style={activeStyle}>Login</NavLink>
           <NavLink to="/orders" style={activeStyle}>Orders</NavLink>
           <NavLink to="/returns" style={activeStyle}>Returns</NavLink>
