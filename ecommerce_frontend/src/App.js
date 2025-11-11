@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import Login from './pages/Login';
 import Orders from './pages/Orders';
@@ -11,7 +11,10 @@ import { getStoredToken, installAuthInterceptor, isAuthenticated, clearToken } f
 
 // Simple protected route wrapper ensuring only authenticated users can access
 function ProtectedRoute({ children }) {
-  if (!isAuthenticated()) {
+  const authed = isAuthenticated();
+  // eslint-disable-next-line no-console
+  console.debug('[AUTH] ProtectedRoute check =>', authed);
+  if (!authed) {
     return <Navigate to="/login" replace />;
   }
   return children;
@@ -21,6 +24,8 @@ function Logout() {
   /** Clear session and redirect to login. */
   const navigate = useNavigate();
   useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.debug('[AUTH] Logging out: clearing token and navigating to /login');
     clearToken();
     navigate('/login', { replace: true });
   }, [navigate]);
@@ -42,6 +47,8 @@ function App() {
     if (token) setAuthToken(token);
     // Install global 401 handler once app starts
     installAuthInterceptor(navigate);
+    // eslint-disable-next-line no-console
+    console.debug('[BOOT] App mounted. Token exists?', Boolean(token));
   }, [navigate]);
 
   // PUBLIC_INTERFACE
@@ -55,7 +62,13 @@ function App() {
         className="theme-toggle"
         onClick={toggleTheme}
         aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-        style={{ position: 'fixed', top: 20, right: 20, zIndex: 10 }}
+        style={{
+          position: 'fixed',
+          top: 20,
+          right: 20,
+          zIndex: 1000, // keep above content
+          pointerEvents: 'auto', // only the button should receive clicks
+        }}
       >
         {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
       </button>

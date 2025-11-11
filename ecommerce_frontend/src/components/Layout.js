@@ -12,6 +12,13 @@ const activeStyle = ({ isActive }) => ({
 // PUBLIC_INTERFACE
 export default function Layout({ children }) {
   /** Simple layout with top navigation for pages. */
+  const logAndPass = (label) => (e) => {
+    // Minimal logging to verify clicks fire and no preventDefault() blocks navigation
+    // Do NOT call e.preventDefault() here
+    // eslint-disable-next-line no-console
+    console.debug(`[NAV] ${label} clicked`);
+  };
+
   return (
     <div className="App">
       <header
@@ -21,6 +28,7 @@ export default function Layout({ children }) {
           padding: 24,
           position: 'relative',
           zIndex: 100, // ensure nav sits above floating controls
+          pointerEvents: 'auto', // ensure header receives clicks
         }}
       >
         <nav
@@ -29,13 +37,14 @@ export default function Layout({ children }) {
             marginBottom: 16,
             position: 'relative',
             zIndex: 100,
+            pointerEvents: 'auto',
           }}
         >
-          <NavLink to="/login" style={activeStyle}>Login</NavLink>
-          <NavLink to="/orders" style={activeStyle}>Orders</NavLink>
-          <NavLink to="/returns" style={activeStyle}>Returns</NavLink>
-          <NavLink to="/recommendations" style={activeStyle}>Recommendations</NavLink>
-          <NavLink to="/logout" style={activeStyle}>Logout</NavLink>
+          <NavLink to="/login" style={activeStyle} onClick={logAndPass('Login')}>Login</NavLink>
+          <NavLink to="/orders" style={activeStyle} onClick={logAndPass('Orders')}>Orders</NavLink>
+          <NavLink to="/returns" style={activeStyle} onClick={logAndPass('Returns')}>Returns</NavLink>
+          <NavLink to="/recommendations" style={activeStyle} onClick={logAndPass('Recommendations')}>Recommendations</NavLink>
+          <NavLink to="/logout" style={activeStyle} onClick={logAndPass('Logout')}>Logout</NavLink>
         </nav>
       </header>
       <main style={{ padding: 24 }}>
