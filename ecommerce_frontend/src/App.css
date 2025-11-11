@@ -42,8 +42,8 @@
 
 .App-header {
   background-color: var(--bg-secondary);
-  /* Avoid blocking clicks across the entire viewport: use auto height; Layout can override as needed */
-  min-height: auto;
+  /* Ensure header has its own height and doesn't overlay content area */
+  min-height: 64px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -53,6 +53,7 @@
   transition: background-color 0.3s ease;
   position: relative;
   pointer-events: auto; /* ensure header accepts clicks */
+  z-index: 1001; /* above floating UI like theme toggle */
 }
 
 .App-link {

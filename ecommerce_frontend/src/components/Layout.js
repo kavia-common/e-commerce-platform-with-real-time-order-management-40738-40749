@@ -12,9 +12,7 @@ const activeStyle = ({ isActive }) => ({
 // PUBLIC_INTERFACE
 export default function Layout({ children }) {
   /** Simple layout with top navigation for pages. */
-  const logAndPass = (label) => (e) => {
-    // Minimal logging to verify clicks fire and no preventDefault() blocks navigation
-    // Do NOT call e.preventDefault() here
+  const logAndPass = (label) => () => {
     // eslint-disable-next-line no-console
     console.debug(`[NAV] ${label} clicked`);
   };
@@ -27,8 +25,8 @@ export default function Layout({ children }) {
           minHeight: 'auto',
           padding: 24,
           position: 'relative',
-          zIndex: 100, // ensure nav sits above floating controls
-          pointerEvents: 'auto', // ensure header receives clicks
+          zIndex: 1001, // ensure nav sits above floating controls
+          pointerEvents: 'auto',
         }}
       >
         <nav
@@ -36,7 +34,7 @@ export default function Layout({ children }) {
           style={{
             marginBottom: 16,
             position: 'relative',
-            zIndex: 100,
+            zIndex: 1001, // higher than any floating widgets
             pointerEvents: 'auto',
           }}
         >

@@ -1,8 +1,3 @@
-//
-// PUBLIC_INTERFACE
-// Auth helper utilities for managing tokens, guarding routes, and handling 401s.
-// This module centralizes token storage/retrieval and integrates with axios api client.
-//
 import { api, setAuthToken } from './apiClient';
 
 /**
@@ -16,6 +11,8 @@ export function getStoredToken() {
   /** Return token string from storage or null. */
   try {
     const token = localStorage.getItem('auth_token');
+    // eslint-disable-next-line no-console
+    console.debug('[AUTH] getStoredToken ->', token ? 'present' : 'absent');
     return token || null;
   } catch {
     return null;
@@ -28,6 +25,8 @@ export function storeToken(token) {
   if (!token || typeof token !== 'string') return;
   localStorage.setItem('auth_token', token);
   setAuthToken(token);
+  // eslint-disable-next-line no-console
+  console.debug('[AUTH] storeToken -> token saved');
 }
 
 // PUBLIC_INTERFACE
@@ -39,6 +38,8 @@ export function clearToken() {
     // ignore
   }
   setAuthToken(null);
+  // eslint-disable-next-line no-console
+  console.debug('[AUTH] clearToken -> token cleared');
 }
 
 // PUBLIC_INTERFACE
@@ -68,6 +69,8 @@ export function installAuthInterceptor(navigate) {
     (error) => {
       const status = error?.response?.status;
       if (status === 401) {
+        // eslint-disable-next-line no-console
+        console.debug('[AUTH] 401 received, clearing token and redirecting to /login');
         clearToken();
         if (typeof navigate === 'function') {
           navigate('/login', { replace: true });

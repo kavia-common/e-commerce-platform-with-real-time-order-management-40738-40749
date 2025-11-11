@@ -15,6 +15,8 @@ function ProtectedRoute({ children }) {
   // eslint-disable-next-line no-console
   console.debug('[AUTH] ProtectedRoute check =>', authed);
   if (!authed) {
+    // eslint-disable-next-line no-console
+    console.debug('[AUTH] Not authenticated, redirecting to /login');
     return <Navigate to="/login" replace />;
   }
   return children;
@@ -44,7 +46,14 @@ function App() {
 
   useEffect(() => {
     const token = getStoredToken();
-    if (token) setAuthToken(token);
+    if (token) {
+      setAuthToken(token);
+      // eslint-disable-next-line no-console
+      console.debug('[AUTH] Restored token from storage');
+    } else {
+      // eslint-disable-next-line no-console
+      console.debug('[AUTH] No token in storage');
+    }
     // Install global 401 handler once app starts
     installAuthInterceptor(navigate);
     // eslint-disable-next-line no-console
@@ -66,8 +75,8 @@ function App() {
           position: 'fixed',
           top: 20,
           right: 20,
-          zIndex: 1000, // keep above content
-          pointerEvents: 'auto', // only the button should receive clicks
+          zIndex: 900, // keep above content but below nav
+          pointerEvents: 'auto',
         }}
       >
         {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
